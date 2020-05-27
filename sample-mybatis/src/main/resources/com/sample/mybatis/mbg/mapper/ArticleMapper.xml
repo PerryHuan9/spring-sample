@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sample.mybatis.mbg.mapper.ArticlesMapper">
-  <resultMap id="BaseResultMap" type="com.sample.mybatis.mbg.model.Articles">
+<mapper namespace="com.sample.mybatis.mbg.mapper.ArticleMapper">
+  <resultMap id="BaseResultMap" type="com.sample.mybatis.mbg.model.Article">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="author" jdbcType="VARCHAR" property="author" />
-    <result column="publish_date" jdbcType="DATE" property="publishDate" />
+    <result column="publish_date" jdbcType="BIGINT" property="publishDate" />
     <result column="article_type" jdbcType="VARCHAR" property="articleType" />
+    <result column="article_id" jdbcType="VARCHAR" property="articleId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,15 +68,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, author, publish_date, article_type
+    id, title, author, publish_date, article_type, article_id
   </sql>
-  <select id="selectByExample" parameterType="com.sample.mybatis.mbg.model.ArticlesExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.sample.mybatis.mbg.model.ArticleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from articles
+    from article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,33 +87,33 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from articles
+    from article
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from articles
+    delete from article
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.sample.mybatis.mbg.model.ArticlesExample">
-    delete from articles
+  <delete id="deleteByExample" parameterType="com.sample.mybatis.mbg.model.ArticleExample">
+    delete from article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.sample.mybatis.mbg.model.Articles">
+  <insert id="insert" parameterType="com.sample.mybatis.mbg.model.Article">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into articles (title, author, publish_date, 
-      article_type)
-    values (#{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{publishDate,jdbcType=DATE}, 
-      #{articleType,jdbcType=VARCHAR})
+    insert into article (title, author, publish_date, 
+      article_type, article_id)
+    values (#{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{publishDate,jdbcType=BIGINT}, 
+      #{articleType,jdbcType=VARCHAR}, #{articleId,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.sample.mybatis.mbg.model.Articles">
+  <insert id="insertSelective" parameterType="com.sample.mybatis.mbg.model.Article">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into articles
+    insert into article
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="title != null">
         title,
@@ -126,6 +127,9 @@
       <if test="articleType != null">
         article_type,
       </if>
+      <if test="articleId != null">
+        article_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="title != null">
@@ -135,21 +139,24 @@
         #{author,jdbcType=VARCHAR},
       </if>
       <if test="publishDate != null">
-        #{publishDate,jdbcType=DATE},
+        #{publishDate,jdbcType=BIGINT},
       </if>
       <if test="articleType != null">
         #{articleType,jdbcType=VARCHAR},
       </if>
+      <if test="articleId != null">
+        #{articleId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.sample.mybatis.mbg.model.ArticlesExample" resultType="java.lang.Long">
-    select count(*) from articles
+  <select id="countByExample" parameterType="com.sample.mybatis.mbg.model.ArticleExample" resultType="java.lang.Long">
+    select count(*) from article
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update articles
+    update article
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
@@ -161,10 +168,13 @@
         author = #{record.author,jdbcType=VARCHAR},
       </if>
       <if test="record.publishDate != null">
-        publish_date = #{record.publishDate,jdbcType=DATE},
+        publish_date = #{record.publishDate,jdbcType=BIGINT},
       </if>
       <if test="record.articleType != null">
         article_type = #{record.articleType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.articleId != null">
+        article_id = #{record.articleId,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -172,18 +182,19 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update articles
+    update article
     set id = #{record.id,jdbcType=BIGINT},
       title = #{record.title,jdbcType=VARCHAR},
       author = #{record.author,jdbcType=VARCHAR},
-      publish_date = #{record.publishDate,jdbcType=DATE},
-      article_type = #{record.articleType,jdbcType=VARCHAR}
+      publish_date = #{record.publishDate,jdbcType=BIGINT},
+      article_type = #{record.articleType,jdbcType=VARCHAR},
+      article_id = #{record.articleId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sample.mybatis.mbg.model.Articles">
-    update articles
+  <update id="updateByPrimaryKeySelective" parameterType="com.sample.mybatis.mbg.model.Article">
+    update article
     <set>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
@@ -192,20 +203,24 @@
         author = #{author,jdbcType=VARCHAR},
       </if>
       <if test="publishDate != null">
-        publish_date = #{publishDate,jdbcType=DATE},
+        publish_date = #{publishDate,jdbcType=BIGINT},
       </if>
       <if test="articleType != null">
         article_type = #{articleType,jdbcType=VARCHAR},
       </if>
+      <if test="articleId != null">
+        article_id = #{articleId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.sample.mybatis.mbg.model.Articles">
-    update articles
+  <update id="updateByPrimaryKey" parameterType="com.sample.mybatis.mbg.model.Article">
+    update article
     set title = #{title,jdbcType=VARCHAR},
       author = #{author,jdbcType=VARCHAR},
-      publish_date = #{publishDate,jdbcType=DATE},
-      article_type = #{articleType,jdbcType=VARCHAR}
+      publish_date = #{publishDate,jdbcType=BIGINT},
+      article_type = #{articleType,jdbcType=VARCHAR},
+      article_id = #{articleId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

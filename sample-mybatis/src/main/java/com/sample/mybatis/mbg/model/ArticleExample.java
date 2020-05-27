@@ -1,18 +1,16 @@
 package com.sample.mybatis.mbg.model;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-public class ArticlesExample {
+public class ArticleExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ArticlesExample() {
+    public ArticleExample() {
         oredCriteria = new ArrayList<>();
     }
 
@@ -104,32 +102,6 @@ public class ArticlesExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -342,53 +314,53 @@ public class ArticlesExample {
             return (Criteria) this;
         }
 
-        public Criteria andPublishDateEqualTo(Date value) {
-            addCriterionForJDBCDate("publish_date =", value, "publishDate");
+        public Criteria andPublishDateEqualTo(Long value) {
+            addCriterion("publish_date =", value, "publishDate");
             return (Criteria) this;
         }
 
-        public Criteria andPublishDateNotEqualTo(Date value) {
-            addCriterionForJDBCDate("publish_date <>", value, "publishDate");
+        public Criteria andPublishDateNotEqualTo(Long value) {
+            addCriterion("publish_date <>", value, "publishDate");
             return (Criteria) this;
         }
 
-        public Criteria andPublishDateGreaterThan(Date value) {
-            addCriterionForJDBCDate("publish_date >", value, "publishDate");
+        public Criteria andPublishDateGreaterThan(Long value) {
+            addCriterion("publish_date >", value, "publishDate");
             return (Criteria) this;
         }
 
-        public Criteria andPublishDateGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("publish_date >=", value, "publishDate");
+        public Criteria andPublishDateGreaterThanOrEqualTo(Long value) {
+            addCriterion("publish_date >=", value, "publishDate");
             return (Criteria) this;
         }
 
-        public Criteria andPublishDateLessThan(Date value) {
-            addCriterionForJDBCDate("publish_date <", value, "publishDate");
+        public Criteria andPublishDateLessThan(Long value) {
+            addCriterion("publish_date <", value, "publishDate");
             return (Criteria) this;
         }
 
-        public Criteria andPublishDateLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("publish_date <=", value, "publishDate");
+        public Criteria andPublishDateLessThanOrEqualTo(Long value) {
+            addCriterion("publish_date <=", value, "publishDate");
             return (Criteria) this;
         }
 
-        public Criteria andPublishDateIn(List<Date> values) {
-            addCriterionForJDBCDate("publish_date in", values, "publishDate");
+        public Criteria andPublishDateIn(List<Long> values) {
+            addCriterion("publish_date in", values, "publishDate");
             return (Criteria) this;
         }
 
-        public Criteria andPublishDateNotIn(List<Date> values) {
-            addCriterionForJDBCDate("publish_date not in", values, "publishDate");
+        public Criteria andPublishDateNotIn(List<Long> values) {
+            addCriterion("publish_date not in", values, "publishDate");
             return (Criteria) this;
         }
 
-        public Criteria andPublishDateBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("publish_date between", value1, value2, "publishDate");
+        public Criteria andPublishDateBetween(Long value1, Long value2) {
+            addCriterion("publish_date between", value1, value2, "publishDate");
             return (Criteria) this;
         }
 
-        public Criteria andPublishDateNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("publish_date not between", value1, value2, "publishDate");
+        public Criteria andPublishDateNotBetween(Long value1, Long value2) {
+            addCriterion("publish_date not between", value1, value2, "publishDate");
             return (Criteria) this;
         }
 
@@ -459,6 +431,76 @@ public class ArticlesExample {
 
         public Criteria andArticleTypeNotBetween(String value1, String value2) {
             addCriterion("article_type not between", value1, value2, "articleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdIsNull() {
+            addCriterion("article_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdIsNotNull() {
+            addCriterion("article_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdEqualTo(String value) {
+            addCriterion("article_id =", value, "articleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdNotEqualTo(String value) {
+            addCriterion("article_id <>", value, "articleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdGreaterThan(String value) {
+            addCriterion("article_id >", value, "articleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdGreaterThanOrEqualTo(String value) {
+            addCriterion("article_id >=", value, "articleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdLessThan(String value) {
+            addCriterion("article_id <", value, "articleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdLessThanOrEqualTo(String value) {
+            addCriterion("article_id <=", value, "articleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdLike(String value) {
+            addCriterion("article_id like", value, "articleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdNotLike(String value) {
+            addCriterion("article_id not like", value, "articleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdIn(List<String> values) {
+            addCriterion("article_id in", values, "articleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdNotIn(List<String> values) {
+            addCriterion("article_id not in", values, "articleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdBetween(String value1, String value2) {
+            addCriterion("article_id between", value1, value2, "articleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andArticleIdNotBetween(String value1, String value2) {
+            addCriterion("article_id not between", value1, value2, "articleId");
             return (Criteria) this;
         }
     }

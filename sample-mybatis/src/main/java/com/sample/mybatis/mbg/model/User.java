@@ -2,7 +2,7 @@ package com.sample.mybatis.mbg.model;
 
 import java.io.Serializable;
 
-public class Users implements Serializable {
+public class User implements Serializable {
     private Long id;
 
     private String name;
