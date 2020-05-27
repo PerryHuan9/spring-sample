@@ -1,79 +1,70 @@
 package com.sample.swagger.controller;
 
-import com.sample.swagger.mbg.model.Articles;
+import com.sample.swagger.controller.exception.InvalidParameter;
+import com.sample.swagger.mbg.model.Article;
 import com.sample.swagger.service.ArticlesService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
+
 
 @Api(tags = "Articles", description = "文章管理接口")
 @RestController
 @RequestMapping("/articles")
 public class ArticlesController {
-    static Articles getArticles(long id, String author, String title, String articleType, String publishDate) {
-        Articles articles = new Articles();
-        articles.setId(id);
-        articles.setAuthor(author);
-        articles.setTitle(title);
-        articles.setArticleType(articleType);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            articles.setPublishDate(df.parse(publishDate));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return articles;
-    }
+    private static Logger logger = LoggerFactory.getLogger(ArticlesController.class);
 
     @Autowired
     private ArticlesService articlesService;
 
     @ApiOperation("所有文章列表")
     @GetMapping("/listAll")
-    List<Articles> listAll() {
+    List<Article> listAll() {
         return articlesService.listAllArticles();
     }
 
     @ApiOperation("分页查找文章列表")
     @GetMapping("/list")
-    List<Articles> list(@ApiParam("单页数据数量") int pageSize, @ApiParam("页数") int pageNum) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageSize", value = "单页数据数量", paramType = "query"),
+            @ApiImplicitParam(name = "pageNum", value = "页数", paramType = "query"),
+    })
+    List<Article> list(Integer pageSize, Integer pageNum) {
+        if (pageSize == null || pageNum == null) {
+            throw new InvalidParameter("pageSize或pageNum参数错误");
+        }
         return articlesService.listArticles(pageSize, pageNum);
     }
 
     @ApiOperation("获取文章")
     @GetMapping("/{id}")
-    Articles getArticle(@ApiParam("文章ID") @PathVariable long id) {
+    Article getArticle(@ApiParam("文章ID") @PathVariable long id) {
         return articlesService.getArticle(id);
     }
 
-    @ApiOperation("增加文章")
+    @ApiOperation(value = "增加文章", notes = "id, publish_date, articleId不需要填写，会自动生成")
     @PostMapping("/add")
-    long insertArticle(
-            @ApiParam("文章作者") String author,
-            @ApiParam("文章标题") String title,
-            @ApiParam("文章类型") String articleType,
-            @ApiParam("文章发布时间") String publishDate) {
-        Articles articles = getArticles(-1, author, title, articleType, publishDate);
-        articlesService.createArticle(articles);
-        return articles.getId();
+    Article insertArticle(@RequestBody Article article) {
+        article.setId(null);
+        article.setPublishDate(Instant.now().getEpochSecond());
+        article.setArticleId(UUID.randomUUID().toString());
+        articlesService.createArticle(article);
+        return article;
     }
 
     @ApiOperation("更新文章内容")
     @PutMapping("/update")
-    int updateArticle(
-            @ApiParam("文章ID") long id,
-            @ApiParam("文章作者") String author,
-            @ApiParam("文章标题") String title,
-            @ApiParam("文章类型") String articleType,
-            @ApiParam("文章发布时间") String publishDate) {
-        Articles articles = getArticles(id, author, title, articleType, publishDate);
-        return articlesService.updateArticle(articles);
+    int updateArticle(Article article) {
+        // 拦截，让以下两位属性不能被修改
+        article.setArticleId(null);
+        article.setPublishDate(null);
+        return articlesService.updateArticle(article);
     }
 
     @ApiOperation("删除文章")
