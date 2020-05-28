@@ -10,7 +10,8 @@ public class ThrowableHandler {
 
     @ExceptionHandler(Throwable.class)
     @ResponseBody
-    public ApiResult handleThrowable() {
+    public ApiResult handleThrowable(Exception e) {
+        e.printStackTrace();
         ApiResult apiResult = new ApiResult();
         apiResult.setCode(500);
         apiResult.setMsg("服务端内部错误");
