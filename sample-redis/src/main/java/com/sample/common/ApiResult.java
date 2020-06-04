@@ -1,4 +1,4 @@
-package com.sample.controller.common;
+package com.sample.common;
 
 
 import lombok.AllArgsConstructor;

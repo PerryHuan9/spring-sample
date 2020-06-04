@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sample.dao.UserRolePermissionRelationDao">
+    <select id="getRoleByUserId" resultMap="com.sample.mbg.mapper.RoleMapper.BaseResultMap">
+        select r.*
+        from user u
+                 INNER JOIN user_role_relation urr ON u.id = urr.user_id
+                 INNER JOIN role r ON r.role_id = urr.role_id
+        where u.id = #{userId};
+    </select>
+    <select id="getPermissionByUserId" resultMap="com.sample.mbg.mapper.PermissionMapper.BaseResultMap">
+        select distinct p.*
+        from user u
+                 LEFT OUTER JOIN user_role_relation urr ON u.id = urr.user_id
+                 LEFT OUTER JOIN role r ON r.role_id = urr.role_id
+                 LEFT OUTER JOIN role_permission_relation rpr ON rpr.role_id = r.role_id
+                 LEFT OUTER JOIN permission p ON rpr.permission_id = p.permission_id
+        where u.id = #{userId}
+          AND p.permission_id IS NOT NULL;
+    </select>
+</mapper>
