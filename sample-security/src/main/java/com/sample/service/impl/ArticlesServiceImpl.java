@@ -1,6 +1,8 @@
 package com.sample.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.sample.dao.ArticleStatisticsDao;
+import com.sample.dto.ArticleTypeStatistics;
 import com.sample.mbg.mapper.ArticleMapper;
 import com.sample.mbg.model.Article;
 import com.sample.mbg.model.ArticleExample;
@@ -14,6 +16,9 @@ import java.util.List;
 public class ArticlesServiceImpl implements ArticlesService {
     @Autowired
     private ArticleMapper articlesMapper;
+
+    @Autowired
+    private ArticleStatisticsDao articleStatisticsDao;
 
 
     @Override
@@ -45,5 +50,10 @@ public class ArticlesServiceImpl implements ArticlesService {
     @Override
     public Article getArticle(long id) {
         return articlesMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<ArticleTypeStatistics> statisticsArticleType() {
+        return articleStatisticsDao.statisticsArticleType();
     }
 }

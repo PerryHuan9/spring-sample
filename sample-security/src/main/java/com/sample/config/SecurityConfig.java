@@ -61,8 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/login", "/user/register")
                 .permitAll()
                 .antMatchers(HttpMethod.OPTIONS) //跨域请求会先进行一次options请求
-//                .permitAll()
-//                .antMatchers("/**")//测试时全部运行访问
+                .permitAll()
+                .antMatchers("/**")//测试时全部运行访问
                 .permitAll()
                 .anyRequest()
                 .authenticated();

@@ -1,6 +1,7 @@
 package com.sample.controller;
 
 import com.sample.controller.exception.InvalidParameter;
+import com.sample.dto.ArticleTypeStatistics;
 import com.sample.mbg.model.Article;
 import com.sample.service.ArticlesService;
 import io.swagger.annotations.*;
@@ -56,7 +57,7 @@ public class ArticlesController {
 
     @ApiOperation(value = "增加文章", notes = "id, publish_date, articleId不需要填写，会自动生成")
     @PostMapping("/add")
-    @PreAuthorize("hasAnyRole('ADMIN','CTRL')")
+//    @PreAuthorize("hasAnyRole('ADMIN','CTRL')")
     Article insertArticle(@RequestBody Article article) {
         article.setId(null);
         article.setPublishDate(Instant.now().getEpochSecond());
@@ -78,5 +79,12 @@ public class ArticlesController {
     @DeleteMapping("/delete")
     int deleteArticle(@ApiParam("文章id") long id) {
         return articlesService.deleteArticle(id);
+    }
+
+
+    @ApiOperation("设备类型统计")
+    @GetMapping("/articleTypeStatistics")
+    List<ArticleTypeStatistics> statisticsArticleType() {
+        return articlesService.statisticsArticleType();
     }
 }
